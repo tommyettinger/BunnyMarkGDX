@@ -53,7 +53,7 @@ configure(subprojects - project(':android')) {
 
 subprojects {
 	version = '0.0.1'
-	ext.appName = 'BunnyMarkGDX'
+	ext.appName = 'BunnyMark'
 	repositories {
 		mavenCentral()
 		maven { url 'https://s01.oss.sonatype.org' }
@@ -65,4 +65,4 @@ subprojects {
 	}
 }
 
-eclipse.project.name = 'BunnyMarkGDX' + '-parent'
+eclipse.project.name = 'BunnyMark' + '-parent'
