@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.gretty:gretty:3.0.7"
+        classpath "org.gretty:gretty:3.0.9"
     }
 }
 apply plugin: "gwt"
@@ -92,7 +92,7 @@ task dist(dependsOn: [clean, compileGwt]) {
         // default unless the outputPath is inside build/ (then the clean task removes them).
         // Do not uncomment the next line if you changed outputPath to a folder that has
         // non-generated files that you want to keep!
-        //delete(file(outputPath))
+        delete(file(outputPath))
 
         file(outputPath).mkdirs()
         copy {
@@ -142,7 +142,6 @@ task distZip(type: Zip, dependsOn: dist){
 tasks.compileGwt.dependsOn(addSource)
 tasks.draftCompileGwt.dependsOn(addSource)
 tasks.checkGwt.dependsOn(addSource)
-checkGwt.war = file("war")
 
 // You can change the version below to JavaVersion.VERSION_11 if you use the 2.9.0 backend.
 sourceCompatibility = JavaVersion.VERSION_1_8

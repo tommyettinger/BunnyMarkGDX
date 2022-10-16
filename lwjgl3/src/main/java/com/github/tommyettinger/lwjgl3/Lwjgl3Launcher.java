@@ -16,7 +16,7 @@ public class Lwjgl3Launcher {
 
 	private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
 		Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-		configuration.setTitle("BunnyMarkGDX");
+//		configuration.setTitle("BunnyMarkGDX");
 		configuration.useVsync(false);
 		configuration.setForegroundFPS(0);
 		configuration.setWindowedMode(640, 480);

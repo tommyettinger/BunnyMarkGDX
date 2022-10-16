@@ -22,32 +22,31 @@ public class BunnyMark extends ApplicationAdapter {
     private Sprite sprite;
     private OrthographicCamera camera;
     private ScreenViewport viewport;
-    private static RandomXS128 random = new RandomXS128();
+    private static final RandomXS128 random = new RandomXS128();
     private static float minX = 0;
     private static float maxX = 0;
     private static float minY = 0;
     private static float maxY = 0;
 
     private BitmapFont labelFont;
-    private float labelX = 5;
     private float labelY;
-    private String bunnyLabel;
-    private String fpsLabel = "";
-    private String sizeLabel = "";
+    private final StringBuilder bunnyLabel = new StringBuilder(7);
+    private final StringBuilder fpsLabel = new StringBuilder(9);
+    private final StringBuilder sizeLabel = new StringBuilder(32);
 
-    private class Bunny {
+    private static class Bunny {
         float x, y, speedX, speedY;
         Color tint;
         public Bunny(Color tint) {
             this.tint = tint;
-            y = maxY/2;
+            y = maxY * 0.5f;
             x = 10;
             speedY = random.nextInt(500) + 250;
             speedX = random.nextInt(500) - 250;
         }
     }
 
-    private Array<Bunny> bunnies = new Array<Bunny>();
+    private final Array<Bunny> bunnies = new Array<Bunny>();
 
     @Override
     public void create() {
@@ -64,7 +63,7 @@ public class BunnyMark extends ApplicationAdapter {
         color = new Color(1, 1, 1, 1);
         bunnies.add(new Bunny(color));
         bunnies.add(new Bunny(color));
-        bunnyLabel = "2";
+        bunnyLabel.append('2');
     }
 
     @Override
@@ -76,17 +75,19 @@ public class BunnyMark extends ApplicationAdapter {
         maxY = camera.viewportHeight - sprite.getHeight();
         labelY = camera.viewportHeight - 5;
         // String.format not available in GWT
-        sizeLabel = width + "x" + height + "(" + Math.round(camera.viewportWidth) + "x" + Math.round(camera.viewportHeight) + ") +" + Gdx.graphics.getDensity();
+        sizeLabel.setLength(0);
+        sizeLabel.append(width).append('x').append(height).append('(').append(Math.round(camera.viewportWidth))
+                .append('x').append(Math.round(camera.viewportHeight)).append(") ").append(Gdx.graphics.getDensity());
     }
 
     private void renderBunny(Bunny bunny, float dt) {
         bunny.x += dt * bunny.speedX;
         if (bunny.x < minX) { bunny.x = minX; bunny.speedX = -bunny.speedX; }
-        if (bunny.x > maxX) { bunny.x = maxX; bunny.speedX = -bunny.speedX; }
+        else if (bunny.x > maxX) { bunny.x = maxX; bunny.speedX = -bunny.speedX; }
 
         bunny.y += dt * bunny.speedY;
         if (bunny.y < minY) { bunny.y = minY; bunny.speedY = -bunny.speedY; }
-        if (bunny.y > maxY) { bunny.y = maxY; bunny.speedY = -bunny.speedY; }
+        else if (bunny.y > maxY) { bunny.y = maxY; bunny.speedY = -bunny.speedY; }
 
         sprite.setPosition(bunny.x,bunny.y);
         sprite.setColor(bunny.tint);
@@ -108,7 +109,8 @@ public class BunnyMark extends ApplicationAdapter {
             for (int i = 0; i < 10; i++) {
                 bunnies.add(new Bunny(color));
             }
-            bunnyLabel = String.valueOf(bunnies.size);
+            bunnyLabel.setLength(0);
+            bunnyLabel.append(bunnies.size);
         } else
             touched = false;
 
@@ -117,7 +119,10 @@ public class BunnyMark extends ApplicationAdapter {
         fpsTime  += dt;
         fpsCount++;
         if (fpsTime > 1f) {
-            fpsLabel = String.valueOf(fpsCount / fpsTime).substring(0,5) + " FPS ";
+            fpsLabel.setLength(0);
+            fpsLabel.append(fpsCount / fpsTime);
+            fpsLabel.setLength(Math.min(fpsLabel.length(), 5));
+            fpsLabel.append(" FPS");
             fpsTime  = 0;
             fpsCount = 0;
         }
@@ -132,6 +137,7 @@ public class BunnyMark extends ApplicationAdapter {
             renderBunny(bunnies.get(i), dt);
         }
 
+        float labelX = 5;
         labelFont.draw(batch, bunnyLabel, labelX, labelY);
         labelFont.draw(batch, fpsLabel  , labelX, labelY - 15);
         labelFont.draw(batch, sizeLabel, labelX, labelY - 30);
