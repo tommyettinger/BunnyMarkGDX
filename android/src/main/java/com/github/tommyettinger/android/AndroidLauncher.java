@@ -8,10 +8,11 @@ import com.github.tommyettinger.BunnyMark;
 
 /** Launches the Android application. */
 public class AndroidLauncher extends AndroidApplication {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
-		initialize(new BunnyMark(), configuration);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
+        configuration.useImmersiveMode = true; // Recommended, but not required.
+        initialize(new BunnyMark(), configuration);
+    }
 }
